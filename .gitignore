@@ -1,0 +1,7 @@
+﻿# Ignore the folder we don't want to push yet
+videos/
+
+# Ignore other common large/temp files
+node_modules/
+*.log
+venv/
