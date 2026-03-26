@@ -1,102 +1,75 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class LipReadingScreen extends StatelessWidget {
+class LipReadingScreen extends StatefulWidget {
   const LipReadingScreen({super.key});
+
+  @override
+  State<LipReadingScreen> createState() => _LipReadingScreenState();
+}
+
+class _LipReadingScreenState extends State<LipReadingScreen> {
+  String responseText = "Ask something...";
+  final TextEditingController controller = TextEditingController();
+
+  // ✅ Function to call backend chatbot API
+  Future<void> sendMessage(String message) async {
+    final url = Uri.parse("http://127.0.0.1:8000/api/v1/chat");
+
+    try {
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"message": message}),
+      );
+
+      final data = jsonDecode(res.body);
+
+      setState(() {
+        responseText = data["response"];
+      });
+    } catch (e) {
+      setState(() {
+        responseText = "Error connecting to backend: $e";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lip Reading')),
+      appBar: AppBar(title: const Text('Chatbot')),
       body: Column(
         children: [
           Expanded(
-            flex: 1,
             child: Container(
-              margin: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Center(
-                    child: Icon(Icons.face, size: 100, color: Colors.white24),
-                  ),
-                  Positioned(
-                    bottom: 16,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.circle, size: 12, color: Colors.white),
-                          SizedBox(width: 8),
-                          Text('REC', style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Text(responseText, style: const TextStyle(fontSize: 22)),
               ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(24),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 10,
-                    offset: Offset(0, -5),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Transcribed Text:',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 16),
-                  const Expanded(
-                    child: SingleChildScrollView(
-                      child: Text(
-                        'This is where the lip reading transcription will appear in real-time as the user speaks.',
-                        style: TextStyle(fontSize: 24, height: 1.5),
-                      ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(
+                      hintText: "Ask something...",
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.copy),
-                        tooltip: 'Copy',
-                      ),
-                      const SizedBox(width: 20),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.volume_up),
-                        tooltip: 'Speak',
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () {
+                    sendMessage(controller.text);
+                    controller.clear();
+                  },
+                ),
+              ],
             ),
           ),
         ],

@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
               onTap: () => context.push('/speech-emotion'),
             ),
             _FeatureCard(
-              title: 'Lip Reading',
+              title: 'Sign Assistant',
               icon: Icons.face,
               color: Colors.pink,
               onTap: () => context.push('/lip-reading'),
@@ -83,12 +83,7 @@ class HomeScreen extends StatelessWidget {
               color: Colors.teal,
               onTap: () => context.push('/speech-to-text'),
             ),
-            _FeatureCard(
-              title: 'Sign Description',
-              icon: Icons.description,
-              color: Colors.purple,
-              onTap: () => context.push('/sign-description'),
-            ),
+
           ],
         ),
       ),
