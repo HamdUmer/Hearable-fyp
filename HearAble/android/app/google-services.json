@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "556053775232",
+    "project_id": "hearable-94cfb",
+    "storage_bucket": "hearable-94cfb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556053775232:android:ceae0c07a9635d9123f765",
+        "android_client_info": {
+          "package_name": "com.example.hearable"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWjvCdjhBF-j0bNUvyZW9uIe1AN26B-pY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 import 'package:go_router/go_router.dart';
 import '../main.dart'; // Import to access themeNotifier
 
@@ -32,11 +33,15 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           // Logout Button
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
-            onPressed: () => context.go('/login'),
-          ),
+         // Logout Button
+IconButton(
+  icon: const Icon(Icons.logout),
+  tooltip: 'Logout',
+  onPressed: () async {
+    await AuthService().logout();
+    if (context.mounted) context.go('/login');
+  },
+),
         ],
       ),
       // Drawer removed as requested

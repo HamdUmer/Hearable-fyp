@@ -4,14 +4,10 @@ import os
 from urllib.parse import quote
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-
-# ✅ Import chatbot router
 from App.Api.v1.router import router as chat_router
 
 
-# =========================
-# 📁 Video Folder Setup
-# =========================
+
 
 videos_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "videos")
@@ -42,16 +38,12 @@ async def lifespan(app: FastAPI):
     print("App shutting down...")
 
 
-# =========================
-# 🚀 FastAPI App
-# =========================
+
 
 app = FastAPI(lifespan=lifespan)
 
 
-# =========================
-# 🌐 CORS (IMPORTANT for Flutter)
-# =========================
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -62,16 +54,11 @@ app.add_middleware(
 )
 
 
-# =========================
-# 📦 Mount Video Folder
-# =========================
+
 
 app.mount("/videos", StaticFiles(directory=videos_path), name="videos")
 
 
-# =========================
-# 🎥 Video API
-# =========================
 
 @app.get("/words")
 def get_words(request: Request):
@@ -91,16 +78,9 @@ def get_words(request: Request):
     return result
 
 
-# =========================
-# 🤖 Chatbot API
-# =========================
 
 app.include_router(chat_router, prefix="/api/v1")
 
-
-# =========================
-# 🏠 Root Endpoint
-# =========================
 
 @app.get("/")
 def home():

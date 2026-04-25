@@ -23,8 +23,9 @@ class SignLibraryScreenState extends State<SignLibraryScreen> {
 
   Future<void> fetchWords() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://192.168.18.28:8000/words')); 
+      final response = await http.get(
+        Uri.parse('http://192.168.18.113:8000/words'),
+      );
       if (response.statusCode == 200) {
         final List data = json.decode(response.body);
         setState(() {
@@ -67,11 +68,11 @@ class SignLibraryScreenState extends State<SignLibraryScreen> {
                     padding: const EdgeInsets.all(16),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 0.8,
-                    ),
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 0.8,
+                        ),
                     itemCount: words.length,
                     itemBuilder: (context, index) {
                       final word = words[index];
@@ -80,8 +81,7 @@ class SignLibraryScreenState extends State<SignLibraryScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  SignDescriptionScreen(word: word),
+                              builder: (_) => SignDescriptionScreen(word: word),
                             ),
                           );
                         },

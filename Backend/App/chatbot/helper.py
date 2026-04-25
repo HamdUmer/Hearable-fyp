@@ -6,7 +6,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings  # updated impo
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os
 
-# dynamically set path for PDF directory
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")  # points to App/data
 

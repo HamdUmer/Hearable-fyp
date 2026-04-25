@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/splash_screen.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/signup_screen.dart';
@@ -14,6 +15,28 @@ import '../models/word.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
+
+  // This runs before every navigation — guards protected routes
+  redirect: (context, state) {
+    final isLoggedIn = FirebaseAuth.instance.currentUser != null;
+    final isOnAuthPage =
+        state.matchedLocation == '/login' ||
+        state.matchedLocation == '/signup' ||
+        state.matchedLocation == '/';
+
+    // If not logged in and trying to access a protected page → send to login
+    if (!isLoggedIn && !isOnAuthPage) {
+      return '/login';
+    }
+
+    // If already logged in and going to login/signup → send to home
+    if (isLoggedIn && isOnAuthPage && state.matchedLocation != '/') {
+      return '/home';
+    }
+
+    return null; // no redirect needed
+  },
+
   routes: [
     GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
@@ -43,11 +66,10 @@ final appRouter = GoRouter(
       path: '/speech-to-text',
       builder: (context, state) => const SpeechToTextScreen(),
     ),
-    // Fixed route for SignDescriptionScreen
     GoRoute(
       path: '/sign-description',
       builder: (context, state) {
-        final Word word = state.extra as Word; // get Word from extra
+        final Word word = state.extra as Word;
         return SignDescriptionScreen(word: word);
       },
     ),
