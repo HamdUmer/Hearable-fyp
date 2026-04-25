@@ -48,3 +48,6 @@ app.*.map.json
 venv/
 videos/
 "@ | Out-File -FilePath ".gitignore" -Encoding utf8
+# Environment variables
+.env
+*.env
